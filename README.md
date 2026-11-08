@@ -94,6 +94,8 @@ Prices from [Render's pricing page](https://render.com/pricing).
 | 1 GB disk | $0.25 |
 | **Total** | **~$7.25** |
 
+The hub used about 10 MB of memory in testing.
+
 ## Troubleshooting
 
 | Problem | Solution |
@@ -101,7 +103,7 @@ Prices from [Render's pricing page](https://render.com/pricing).
 | Admin sign-in fails | The account is created on first boot only. Use `USER_PASSWORD` from the **Environment** page, or the password you set in the UI. |
 | Agent shows as down | Check that `HUB_URL` in the agent's config is the hub's public `https://` URL and that `TOKEN` matches the one the hub shows for that system. |
 | Metrics disappear after a deploy | Confirm the disk is mounted at `/beszel_data`. |
-| Deploy takes about a minute of downtime | Expected. A service with a disk stops the old instance before it starts the new one. Agents reconnect on their own. |
+| Deploy takes under a minute of downtime | Expected. A service with a disk stops the old instance before it starts the new one. Agents retry every 10 seconds and reconnect on their own. |
 
 ## Project Structure
 
