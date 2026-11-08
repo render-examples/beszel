@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=https://render.com/schema/render.yaml.json
+#
+# Beszel hub wrapper. This repo does not contain the app.
+# The service pulls the official image from Docker Hub at a pinned version.
+# To upgrade, bump the image tag below and push.
+# Upstream: https://github.com/henrygd/beszel
+
+previews:
+  generation: off
+
+projects:
+  - name: beszel
+    environments:
+      - name: production
+        services:
+          - type: web
+            name: beszel
+            runtime: image
+            image:
+              url: docker.io/henrygd/beszel:0.21.1
+            plan: starter
+            region: oregon
+            # PocketBase (SQLite) on a disk, so one instance only.
+            numInstances: 1
+            healthCheckPath: /api/health
+            disk:
+              name: beszel-data
+              mountPath: /beszel_data
+              sizeGB: 1
+            envVars:
+              # Used in alert emails and the agent setup commands.
+              - key: APP_URL
+                fromService:
+                  name: beszel
+                  type: web
+                  envVarKey: RENDER_EXTERNAL_URL
+              # Admin account, created on first boot. Without these, the first
+              # person to open the URL creates the admin.
+              - key: USER_EMAIL
+                sync: false
+              - key: USER_PASSWORD
+                generateValue: true
